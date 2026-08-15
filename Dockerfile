@@ -1,5 +1,17 @@
-FROM eclipse-temurin:21
+FROM eclipse-temurin:21-jdk AS build
 
-COPY build/libs/*.jar app.jar
+WORKDIR /app
 
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+COPY . .
+
+RUN chmod +x gradlew
+RUN ./gradlew clean bootJar --no-daemon
+
+
+FROM eclipse-temurin:21-jre
+
+WORKDIR /app
+
+COPY --from=build /app/build/libs/*.jar app.jar
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
