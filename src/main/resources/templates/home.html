@@ -1,0 +1,130 @@
+<!doctype html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>예약 시스템</title>
+
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f4f6f8;
+      }
+
+      .navbar {
+        background: #1f2937;
+        color: white;
+        padding: 16px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .navbar a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+      }
+
+      .logout-button {
+        background: none;
+        border: none;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        padding: 0;
+        font-size: inherit;
+        font-family: inherit;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 80px auto;
+        background: white;
+        padding: 50px;
+        border-radius: 16px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 40px;
+        margin-bottom: 16px;
+        color: #111827;
+      }
+
+      p {
+        color: #6b7280;
+        font-size: 18px;
+        margin-bottom: 40px;
+      }
+
+      .buttons {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+      }
+
+      .btn {
+        padding: 14px 24px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: bold;
+      }
+
+      .btn-primary {
+        background: #2563eb;
+        color: white;
+      }
+
+      .btn-secondary {
+        background: #e5e7eb;
+        color: #111827;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="navbar">
+      <div>Reservation System</div>
+
+      <div>
+        <!-- 로그인하지 않은 사용자 -->
+        <a sec:authorize="isAnonymous()" th:href="@{/login}"> 로그인 </a>
+
+        <!-- 로그인한 사용자 -->
+        <form
+          sec:authorize="isAuthenticated()"
+          th:action="@{/logout}"
+          method="post"
+          style="display: inline"
+        >
+          <button type="submit" class="logout-button">로그아웃</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="container">
+      <h1>예약 시스템</h1>
+
+      <p>원하는 날짜와 시간을 선택해서 쉽고 빠르게 예약하세요.</p>
+
+      <div class="buttons">
+        <a th:href="@{/reservation/create}" class="btn btn-primary">
+          예약하기
+        </a>
+
+        <a th:href="@{/reservation/list}" class="btn btn-secondary">
+          내 예약 보기
+        </a>
+
+        <a th:href="@{/room/create}" class="btn btn-primary"> 회의실 등록 </a>
+
+        <a th:href="@{/room/list}" class="btn btn-primary"> 회의실 목록 </a>
+      </div>
+    </div>
+  </body>
+</html>

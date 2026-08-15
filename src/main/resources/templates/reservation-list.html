@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>내 예약 목록</title>
+
+    <style>
+      body {
+        margin: 0;
+        background: #f4f6f8;
+        font-family: Arial, sans-serif;
+      }
+
+      .navbar {
+        background: #1f2937;
+        color: white;
+        padding: 16px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .navbar a {
+        color: white;
+        text-decoration: none;
+        margin-left: 20px;
+        font-weight: bold;
+      }
+
+      .logout-form {
+        display: inline;
+        margin-left: 20px;
+      }
+
+      .logout-button {
+        background: none;
+        border: none;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        padding: 0;
+        font-size: inherit;
+        font-family: inherit;
+      }
+
+      .container {
+        width: 900px;
+        margin: 70px auto;
+        background: white;
+        padding: 40px;
+        border-radius: 16px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      }
+
+      h1 {
+        color: #111827;
+        margin-bottom: 10px;
+      }
+
+      .subtitle {
+        color: #6b7280;
+        margin-bottom: 30px;
+      }
+
+      .top-actions {
+        text-align: right;
+        margin-bottom: 20px;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 10px 16px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 14px;
+      }
+
+      .btn-primary {
+        background: #2563eb;
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: #1d4ed8;
+      }
+
+      .btn-danger {
+        background: #dc2626;
+        color: white;
+        padding: 8px 12px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: bold;
+      }
+
+      .btn-danger:hover {
+        background: #b91c1c;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      thead {
+        background: #f3f4f6;
+      }
+
+      th,
+      td {
+        padding: 14px 12px;
+        border-bottom: 1px solid #e5e7eb;
+        text-align: center;
+      }
+
+      th {
+        color: #374151;
+        font-size: 14px;
+      }
+
+      td {
+        color: #111827;
+      }
+
+      .empty {
+        text-align: center;
+        padding: 50px 0;
+        color: #6b7280;
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: #e0ecff;
+        color: #1d4ed8;
+        font-size: 13px;
+        font-weight: bold;
+      }
+
+      .status {
+        color: #059669;
+        font-weight: bold;
+      }
+
+      .btn-edit {
+        display: inline-block;
+        padding: 8px 14px;
+        background: #2563eb;
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+        font-size: 13px;
+        margin-right: 5px;
+      }
+
+      .btn-edit:hover {
+        background: #1d4ed8;
+      }
+
+      .btn-delete {
+        display: inline-block;
+        padding: 8px 14px;
+        background: #dc2626;
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+        font-size: 13px;
+      }
+
+      .btn-delete:hover {
+        background: #b91c1c;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="navbar">
+      <div>Reservation System</div>
+
+      <div>
+        <a th:href="@{/}">홈</a>
+
+        <a th:href="@{/reservation/create}"> 예약하기 </a>
+
+        <a th:href="@{/room/create}"> 회의실 등록 </a>
+
+        <form th:action="@{/logout}" method="post" class="logout-form">
+          <button type="submit" class="logout-button">로그아웃</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="container">
+      <h1>내 예약 목록</h1>
+
+      <div class="subtitle">
+        내가 등록한 예약을 확인하고 취소할 수 있습니다.
+      </div>
+
+      <div class="top-actions">
+        <a th:href="@{/reservation/create}" class="btn btn-primary">
+          새 예약 등록
+        </a>
+      </div>
+
+      <div th:if="${#lists.isEmpty(reservations)}" class="empty">
+        아직 등록된 예약이 없습니다.
+      </div>
+
+      <table th:if="${!#lists.isEmpty(reservations)}">
+        <thead>
+          <tr>
+            <th>예약번호</th>
+            <th>회의실</th>
+            <th>예약 날짜</th>
+            <th>시작 시간</th>
+            <th>종료 시간</th>
+            <th>상태</th>
+            <th>관리</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr th:each="reservation : ${reservations}">
+            <td th:text="${reservation.id}">1</td>
+
+            <td>
+              <span class="badge" th:text="${reservation.roomName}">
+                회의실 A
+              </span>
+            </td>
+
+            <td th:text="${reservation.reservationDate}">2026-06-19</td>
+
+            <td th:text="${reservation.startTime}">10:00</td>
+
+            <td th:text="${reservation.endTime}">11:00</td>
+
+            <td class="status">예약 완료</td>
+
+            <td>
+              <a
+                th:href="@{/reservation/edit/{id}(id=${reservation.id})}"
+                class="btn-edit"
+              >
+                수정
+              </a>
+
+              <a
+                class="btn-danger"
+                th:href="@{/reservation/delete/{id}(id=${reservation.id})}"
+                onclick="return confirm('정말 예약을 취소하시겠습니까?');"
+              >
+                취소
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,22 @@
+services:
+  db:
+    image: postgres:17
+    container_name: reservation-db
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypass
+    ports:
+      - "5434:5432"
+
+  app:
+    image: reservation-app
+    container_name: reservation-app
+    ports:
+      - "8082:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/mydb
+      SPRING_DATASOURCE_USERNAME: myuser
+      SPRING_DATASOURCE_PASSWORD: mypass
+    depends_on:
+      - db
